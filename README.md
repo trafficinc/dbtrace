@@ -4,6 +4,33 @@ See exactly what changed in MySQL after a web-app action.
 
 `dbtrace` is a developer CLI for tracing database behavior. Take a snapshot, perform an action in your app, take another snapshot, and get a grouped report of inserted, updated, and deleted values.
 
+## Why dbtrace?
+
+When working with an unfamiliar or legacy application, a single action can quietly affect several tables.
+
+Instead of manually inspecting the database or tracing application code:
+
+```text
+dbtrace before
+# perform the action
+dbtrace after
+```
+
+dbtrace tells you what changed.
+
+## Good use cases
+
+- Reverse-engineering legacy applications
+- Debugging unexpected side effects
+- Understanding unfamiliar codebases
+- Checking what a form submission actually changes
+- Testing integrations
+- Validating business workflows
+- Discovering audit/history tables
+- Investigating database writes during development
+
+> dbtrace does not modify application data. It reads database state to build and compare snapshots.
+
 ## Build
 
 Build release binaries:
