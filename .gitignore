@@ -1,0 +1,44 @@
+# Build artifacts
+/dist/
+/dbtrace
+*.exe
+*.test
+*.out
+
+# Local bootstrapped toolchains
+/.tools/
+
+# Runtime snapshots and local generated data
+/.dbtrace/
+**/.dbtrace/
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+
+# Local config and secrets
+/dbtrace.yaml
+/build.md
+*.local.yaml
+.env
+.env.*
+!.env.example
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+tmp/
+temp/
+
+# Go workspace/cache files
+go.work
+go.work.sum
+
+# Editor and OS noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo

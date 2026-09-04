@@ -1,0 +1,27 @@
+database:
+  dsn: "user:pass@tcp(localhost:3306)/app_db"
+
+snapshot:
+  workers: 4
+  chunk_size: 10000
+  output_dir: ".dbtrace/snapshots"
+
+report:
+  max_lines_per_operation: 50
+  max_value_length: 200
+
+keys:
+  # Use this for legacy tables without a real primary key.
+  # table_name:
+  #   - column_a
+  #   - column_b
+
+ignore:
+  tables:
+    - sessions
+    - cache
+    - jobs
+  columns:
+    - created_at
+    - updated_at
+    - last_seen
