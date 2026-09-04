@@ -168,7 +168,7 @@ report:
 
 keys:
   # Optional for legacy tables without primary keys.
-  # redcap_data:
+  # legacy_data_table:
   #   - project_id
   #   - record
   #   - field_name
@@ -205,11 +205,11 @@ For passwords with special characters, prefer `.env` variables or URL-escaped pa
 3. the smallest unique index
 4. synthetic row identity from the row hash
 
-For older applications or REDCap-style schemas, configure logical keys explicitly:
+For older applications or legacy-style schemas, configure logical keys explicitly:
 
 ```yaml
 keys:
-  redcap_data:
+  legacy_data:
     - project_id
     - record
     - field_name
