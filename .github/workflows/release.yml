@@ -1,0 +1,49 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out tagged source
+        uses: actions/checkout@v7
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+
+      - name: Run tests
+        run: ./scripts/test.sh
+
+      - name: Build executables
+        run: ./scripts/build.sh
+
+      - name: Generate checksums
+        working-directory: dist
+        run: sha256sum dbtrace-darwin-arm64 dbtrace-windows-amd64.exe > checksums.txt
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          gh release create "$RELEASE_TAG" \
+            --verify-tag \
+            --generate-notes \
+            dist/dbtrace-darwin-arm64 \
+            dist/dbtrace-windows-amd64.exe \
+            dist/checksums.txt

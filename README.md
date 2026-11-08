@@ -42,7 +42,6 @@ Build release binaries:
 The build script uses `CGO_ENABLED=0` and produces:
 
 ```text
-dist/dbtrace-darwin-amd64
 dist/dbtrace-darwin-arm64
 dist/dbtrace-windows-amd64.exe
 ```
@@ -52,7 +51,6 @@ If your system Go is older than required, `scripts/go.sh` downloads a workspace-
 Manual build commands:
 
 ```bash
-CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o dist/dbtrace-darwin-amd64 ./cmd/dbtrace
 CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -o dist/dbtrace-darwin-arm64 ./cmd/dbtrace
 CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o dist/dbtrace-windows-amd64.exe ./cmd/dbtrace
 ```
@@ -85,7 +83,7 @@ If you have an app that uses MySQL:
 /path/to/dbtrace/dist/dbtrace-darwin-arm64 init --dsn="user:pass@tcp(localhost:3306)/your_app_db"
 ```
 
-Use `dbtrace-darwin-amd64` on Intel Mac, or `dbtrace-windows-amd64.exe` on Windows.
+Use `dbtrace-windows-amd64.exe` on Windows.
 
 3. Take a before snapshot:
 
@@ -316,8 +314,20 @@ Ignored columns are excluded from row hashes and stored row values.
 
 Release builds target:
 
-- macOS amd64
-- macOS arm64
+- macOS arm64 (Apple Silicon)
 - Windows amd64
 
 The project uses a pure-Go SQLite driver and `filepath`-safe paths so builds and snapshot paths work on macOS and Windows.
+
+## Publishing a Release
+
+After committing and pushing the release workflow and source changes, push a version tag:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+Tags matching `v*` trigger the release workflow on an Ubuntu runner. It installs Go using `go.mod`, runs the tests, and builds the Mac Apple Silicon and Windows executables. If tests and builds pass, it creates a GitHub Release with generated notes and attaches both executables and `checksums.txt` containing their SHA-256 hashes.
+
+The workflow uses GitHub's built-in token with `contents: write`; no additional secrets are required. Download the executables from the release's Assets section. On macOS, make the downloaded executable runnable with `chmod +x dbtrace-darwin-arm64`.
